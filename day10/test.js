@@ -29,7 +29,12 @@ test.each([
   expect(actual).toBe(expectation);
 });
 
-const nestTestCase1 = `...........
+// xxx
+// x.x
+// xxx
+
+const nestTestCase1 = 
+`...........
 .S-------7.
 .|F-----7|.
 .||.....||.
@@ -65,7 +70,7 @@ test.each([
   ["test", nestTestCase1, 4, []],
   ["test 2", nestTestCase2, 8, []],
   ["test 3", nestTestCase3, 10, []],
-  // ['input', input, -1, []]
+  ['input', input, 579, []]
 ])("p2 works for %s", (name, input, expectation, bads) => {
   const actual = p2(input);
 

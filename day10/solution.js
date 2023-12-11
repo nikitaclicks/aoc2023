@@ -6,6 +6,8 @@ const Direction = {
   Right: 'Right'
 }
 
+const Animal = 'S';
+
 const moves = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
 
 const moveOpposites = { 
@@ -23,7 +25,7 @@ const possibleCellMoves = {
   '7': [Direction.Down, Direction.Left],
   'F': [Direction.Down, Direction.Right],
   '.': [],
-  'S': moves
+  [Animal]: moves
 };
 
 function p1(input) {
@@ -67,7 +69,7 @@ function findLoop(startPosition, field) {
 function getAnimalPosition(field) {
   for (let y = 0; y < field.length; ++y) {
     for (let x = 0; x < field[0].length; ++x) {
-      if (field[y][x] === 'S') {
+      if (field[y][x] === Animal) {
         return [x, y];
       }
     }
@@ -94,11 +96,13 @@ function step(currentPosition, direction, field) {
       break;
     default:
       // this should never happen
-      throw new Error('default swithc');
+      throw new Error('default switch');
       break;
   }
 
-  if (nextPosition[0] < 0 || nextPosition[1] < 0 || nextPosition[0] >= field[0].length || nextPosition[1] >= field[1].length) {
+  if (nextPosition[0] < 0 || nextPosition[1] < 0 
+    || nextPosition[0] >= field[0].length 
+    || nextPosition[1] >= field[1].length) {
     // the next cell is out of bounds
     hasError = true;
   }
@@ -133,28 +137,182 @@ function p2(input) {
 
   const loop = findLoop(animalPosition, field);
 
-  loop.push(loop[0]);
-
-  const visitedNodes = new Map([[`${loop[0][0]}_${loop[0][1]}`, 0]]); // x_y -> i
-  const closedSpaces = [];
-  for (let i = 1; i < loop.length; ++i) {
-    const prevCell = loop[i - 1];
-    const cell = loop[i];
-
-    visitedNodes.set(`${cell[0]}_${cell[1]}`, i);
-
-    const nodesToCloseSpace = getNodesToCloseSpace(prevCell, cell);
-
-    // if (i >= 5) {
-    //   // min nodes to close just a single cell
-    // }
+  const loopNodes = new Set();
+  for (const node of loop) {
+    loopNodes.add(getId(node));
   }
 
-  return -1;
+  const bounds = getBoundingBox(loop);
+
+  const leftNodesById = new Map();
+  const rightNodesById = new Map();
+  let leftTouchesBounds = false;
+  let rightTouchesBounds = false;
+
+  let prevDirection;
+  for (let i = 0; i < loop.length; ++i) {
+    const node = loop[i];
+    const direction = node[2];
+
+    const leftNodes = [getLeftNode(node, direction)];
+    const rightNodes = [getRightNode(node, direction)];
+
+    if (prevDirection && prevDirection != direction) {
+      leftNodes.push(getLeftNode(node, prevDirection))
+      rightNodes.push(getRightNode(node, prevDirection))
+    }
+
+    for (const leftNode of leftNodes) {
+      const leftNodeId = getId(leftNode);
+      if (!loopNodes.has(leftNodeId)) {
+        leftNodesById.set(leftNodeId, leftNode);
+
+        if (!leftTouchesBounds && !rightTouchesBounds && touchesOrOutOfBounds(leftNode, bounds)) {
+          leftTouchesBounds = true;
+        }
+      }
+    }
+
+    for (const rightNode of rightNodes) {
+      const rightNodeId = getId(rightNode);
+      if (!loopNodes.has(rightNodeId)) {
+        rightNodesById.set(rightNodeId, rightNode);
+
+        if (!leftTouchesBounds && !rightTouchesBounds && touchesOrOutOfBounds(rightNode, bounds)) {
+          rightTouchesBounds = true;
+        }
+      }
+    }
+
+    prevDirection = direction;
+  }
+
+  let result;
+
+  if (leftTouchesBounds) {
+    result = extrapolate(rightNodesById, loopNodes);
+  } else if (rightTouchesBounds) {
+    result = extrapolate(leftNodesById, loopNodes);
+  } else {
+    // both dont touch bounds yet
+
+    const left = extrapolate(leftNodesById, loopNodes);
+
+    for (const node of left) {
+      if (touchesOrOutOfBounds(node, bounds)) {
+        leftTouchesBounds = true;
+        break;
+      }
+    }
+
+    if (leftTouchesBounds) {
+      result = extrapolate(rightNodesById, loopNodes);
+    } else {
+      // right will for sure touch bounds
+      result = left;
+    }
+  }
+
+  return result.size;
 }
 
-function getNodesToCloseSpace(prevCell, currentCell) {
-  return [];
+function extrapolate(nodes, loopNodes, extrapolatedIds = new Set()) {
+  for (const [id] of nodes) {
+    extrapolatedIds.add(id);
+  }
+
+  const nextNodes = new Map();
+
+  for (const [_, node] of nodes) {
+    const neighbours = getNeighbours(node, loopNodes);
+
+    for (const neighbour of neighbours) {
+      const neighbourId = getId(neighbour);
+      if (!extrapolatedIds.has(neighbourId)) {
+        nextNodes.set(neighbourId, neighbour);
+        extrapolatedIds.add(neighbourId);
+      }
+    }
+  }
+
+  if (nextNodes.size) {
+    extrapolate(nextNodes, loopNodes, extrapolatedIds);
+  }
+
+  return extrapolatedIds;
+}
+
+function getId(node) {
+  return `${node[0]}_${node[1]}`;
+}
+
+function getNeighbours(node, loopNodes) {
+  const neighbours = [
+    [node[0] - 1, node[1]],
+    [node[0] + 1, node[1]],
+    [node[0], node[1] - 1],
+    [node[0], node[1] + 1]
+  ];
+
+  return neighbours.filter(n => !loopNodes.has(`${n[0]}_${n[1]}`));
+}
+
+function getLeftNode(node, direction) {
+  // if up -> left
+  // if down -> right
+  // if left -> down
+  // if right -> up
+  switch (direction) {
+    case Direction.Up:
+      return [node[0]-1, node[1]];
+    case Direction.Down:
+      return [node[0]+1, node[1]];
+    case Direction.Left:
+      return [node[0], node[1]+1];
+    case Direction.Right:
+      return [node[0], node[1]-1];
+  }
+}
+
+function getRightNode(node, direction) {
+  // if up -> right
+  // if down -> left
+  // if left -> up
+  // if right -> down
+  switch (direction) {
+    case Direction.Up:
+      return [node[0]+1, node[1]];
+    case Direction.Down:
+      return [node[0]-1, node[1]];
+    case Direction.Left:
+      return [node[0], node[1]-1];
+    case Direction.Right:
+      return [node[0], node[1]+1];
+  }
+}
+
+function touchesOrOutOfBounds(node, bounds) {
+  return node[0] <= bounds.minX
+    || node[0] >= bounds.maxX
+    || node[1] <= bounds.minY
+    || node[1] >= bounds.maxY;
+}
+
+function getBoundingBox(loop) {
+  let minX = Number.MAX_SAFE_INTEGER, 
+    minY = Number.MAX_SAFE_INTEGER, 
+    maxX = -1, 
+    maxY = -1;
+
+  for (let [x, y] of loop) {
+    if (x > maxX) maxX = x;
+    if (x < minX) minX = x;
+
+    if (y > maxY) maxY = y;
+    if (y < minY) minY = y;
+  }
+
+  return { minX, minY, maxX, maxY };
 }
 
 module.exports.p2 = p2;

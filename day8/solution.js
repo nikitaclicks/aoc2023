@@ -84,26 +84,6 @@ function p2(input) {
   const lcm = leastCommonMultiple(nums);
 
   return lcm;
-
-  // const positions = startNodes;
-
-  // let steps = 0;
-
-  // for (let step = 0; !positions.every(p => p[2] === 'Z'); ++step) {
-  //   if (step === instructions.length) {
-  //     step = 0;
-  //   }
-  //   const instruction = instructions[step];
-
-  //   for (let i = 0; i < positions.length; i++) {
-  //     const node = nodes.get(positions[i]);
-  //     positions[i] = instruction === 'L' ? node[0] : node[1];
-  //   }
-
-  //   steps++;
-  // }
-
-  // return steps;
 }
 
 function leastCommonMultiple(nums) {

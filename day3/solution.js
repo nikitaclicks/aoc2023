@@ -3,16 +3,10 @@ function p1(input) {
 
   const symbols = Array(rows.length)
     .fill(0)
-    .map(() =>
-      Array(rows[0].length)
-        .fill(false)
-    );
+    .map(() => Array(rows[0].length).fill(false));
   const numbers = Array(rows.length)
     .fill(0)
-    .map(() =>
-      Array(rows[0].length)
-        .fill(undefined)
-    );
+    .map(() => Array(rows[0].length).fill(undefined));
   const readyNums = [];
 
   for (let y = 0; y < rows.length; ++y) {
@@ -24,7 +18,7 @@ function p1(input) {
         if (x > 0 && numbers[y][x - 1]) {
           numCfg = numbers[y][x - 1];
         } else {
-          numCfg = { num: '', withSymbol: false };
+          numCfg = { num: "", withSymbol: false };
           readyNums.push(numCfg);
         }
         numCfg.num += num;
@@ -38,7 +32,11 @@ function p1(input) {
         // propagate symbols from up
         else if (y > 0) {
           const prevY = y - 1;
-          for (let prevX = Math.min(x + 1, rows[y].length - 1); prevX >= Math.max(x - 1, 0); --prevX) {
+          for (
+            let prevX = Math.min(x + 1, rows[y].length - 1);
+            prevX >= Math.max(x - 1, 0);
+            --prevX
+          ) {
             const symbolCfg = symbols[prevY][prevX];
 
             if (symbolCfg) {
@@ -47,7 +45,7 @@ function p1(input) {
           }
         }
       }
-      const isSymbol = !isNum && rows[y][x] !== '.';
+      const isSymbol = !isNum && rows[y][x] !== ".";
 
       if (isSymbol) {
         symbols[y][x] = true;
@@ -63,7 +61,11 @@ function p1(input) {
         //propagate symbol up
         if (y > 0) {
           const prevY = y - 1;
-          for (let prevX = Math.min(x + 1, rows[y].length - 1); prevX >= Math.max(x - 1, 0); --prevX) {
+          for (
+            let prevX = Math.min(x + 1, rows[y].length - 1);
+            prevX >= Math.max(x - 1, 0);
+            --prevX
+          ) {
             const numCfg = numbers[prevY][prevX];
 
             if (numCfg) {
@@ -75,7 +77,9 @@ function p1(input) {
     }
   }
 
-  return readyNums.filter(x => x.withSymbol).reduce((a, b) => a + Number(b.num), 0);
+  return readyNums
+    .filter((x) => x.withSymbol)
+    .reduce((a, b) => a + Number(b.num), 0);
 }
 
 module.exports.p1 = p1;
@@ -85,16 +89,10 @@ function p2(input) {
 
   const symbols = Array(rows.length)
     .fill(0)
-    .map(() =>
-      Array(rows[0].length)
-        .fill(undefined)
-    );
+    .map(() => Array(rows[0].length).fill(undefined));
   const numbers = Array(rows.length)
     .fill(0)
-    .map(() =>
-      Array(rows[0].length)
-        .fill(undefined)
-    );
+    .map(() => Array(rows[0].length).fill(undefined));
   const readyGears = [];
 
   for (let y = 0; y < rows.length; ++y) {
@@ -106,7 +104,7 @@ function p2(input) {
         if (x > 0 && numbers[y][x - 1]) {
           numCfg = numbers[y][x - 1];
         } else {
-          numCfg = { num: '' };
+          numCfg = { num: "" };
         }
         numCfg.num += num;
         numbers[y][x] = numCfg;
@@ -119,7 +117,11 @@ function p2(input) {
         // propagate numbers up
         if (y > 0) {
           const prevY = y - 1;
-          for (let prevX = Math.min(x + 1, rows[y].length - 1); prevX >= Math.max(x - 1, 0); --prevX) {
+          for (
+            let prevX = Math.min(x + 1, rows[y].length - 1);
+            prevX >= Math.max(x - 1, 0);
+            --prevX
+          ) {
             const symbolCfg = symbols[prevY][prevX];
 
             if (symbolCfg) {
@@ -128,7 +130,7 @@ function p2(input) {
           }
         }
       }
-      const isSymbol = rows[y][x] === '*';
+      const isSymbol = rows[y][x] === "*";
 
       if (isSymbol) {
         symbols[y][x] = { nums: new Set() };
@@ -145,7 +147,11 @@ function p2(input) {
         // propagate number from up
         if (y > 0) {
           const prevY = y - 1;
-          for (let prevX = Math.min(x + 1, rows[y].length - 1); prevX >= Math.max(x - 1, 0); --prevX) {
+          for (
+            let prevX = Math.min(x + 1, rows[y].length - 1);
+            prevX >= Math.max(x - 1, 0);
+            --prevX
+          ) {
             const numCfg = numbers[prevY][prevX];
 
             if (numCfg) {
@@ -157,8 +163,12 @@ function p2(input) {
     }
   }
 
-  return readyGears.filter(x => x.nums.size === 2)
-    .reduce((a, b) => a + [...b.nums].reduce((c, d) => c * Number(d.num), 1), 0);
+  return readyGears
+    .filter((x) => x.nums.size === 2)
+    .reduce(
+      (a, b) => a + [...b.nums].reduce((c, d) => c * Number(d.num), 1),
+      0
+    );
 }
 
 module.exports.p2 = p2;

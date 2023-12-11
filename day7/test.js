@@ -18,7 +18,7 @@ TTT98 7`;
 test.each([
   ["test", testCase, 6440, []],
   ["my", myCase, 193, [198]],
-  ['input', input, 246163188, [246246128]]
+  ["input", input, 246163188, [246246128]],
 ])("p1 works for %s", (name, input, expectation, bads) => {
   const actual = p1(input);
 
@@ -34,7 +34,7 @@ test.each([
 test.each([
   ["test", testCase, 5905, []],
   // ["my", myCase, 215, []],
-  ['input', input, 245794069, [245886126, 245682144]]
+  ["input", input, 245794069, [245886126, 245682144]],
 ])("p2 works for %s", (name, input, expectation, bads) => {
   const actual = p2(input);
 

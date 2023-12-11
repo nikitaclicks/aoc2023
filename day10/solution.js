@@ -1,31 +1,31 @@
 const Direction = {
-  Stop: 'Stop',
-  Up: 'Up',
-  Down: 'Down',
-  Left: 'Left',
-  Right: 'Right'
-}
+  Stop: "Stop",
+  Up: "Up",
+  Down: "Down",
+  Left: "Left",
+  Right: "Right",
+};
 
-const Animal = 'S';
+const Animal = "S";
 
 const moves = [Direction.Up, Direction.Down, Direction.Left, Direction.Right];
 
-const moveOpposites = { 
+const moveOpposites = {
   [Direction.Up]: Direction.Down,
   [Direction.Down]: Direction.Up,
   [Direction.Left]: Direction.Right,
   [Direction.Right]: Direction.Left,
- }; 
+};
 
 const possibleCellMoves = {
-  '|': [Direction.Up, Direction.Down],
-  '-': [Direction.Left, Direction.Right],
-  'L': [Direction.Up, Direction.Right],
-  'J': [Direction.Up, Direction.Left],
-  '7': [Direction.Down, Direction.Left],
-  'F': [Direction.Down, Direction.Right],
-  '.': [],
-  [Animal]: moves
+  "|": [Direction.Up, Direction.Down],
+  "-": [Direction.Left, Direction.Right],
+  L: [Direction.Up, Direction.Right],
+  J: [Direction.Up, Direction.Left],
+  7: [Direction.Down, Direction.Left],
+  F: [Direction.Down, Direction.Right],
+  ".": [],
+  [Animal]: moves,
 };
 
 function p1(input) {
@@ -45,13 +45,18 @@ function findLoop(startPosition, field) {
     let direction = move;
     while (true) {
       const currentPosition = cells[cells.length - 1];
-      const { nextDirection, nextPosition } = step(currentPosition, direction, field);
-    
+      const { nextDirection, nextPosition } = step(
+        currentPosition,
+        direction,
+        field
+      );
+
       if (nextDirection === Direction.Stop) {
         // pipe is broken
         break;
       } else {
-        const nextPosIsAnimal = nextPosition[0] === cells[0][0] && nextPosition[1] === cells[0][1];
+        const nextPosIsAnimal =
+          nextPosition[0] === cells[0][0] && nextPosition[1] === cells[0][1];
         if (nextPosIsAnimal) {
           // loop ended, animal reached itself again
           return cells;
@@ -96,13 +101,16 @@ function step(currentPosition, direction, field) {
       break;
     default:
       // this should never happen
-      throw new Error('default switch');
+      throw new Error("default switch");
       break;
   }
 
-  if (nextPosition[0] < 0 || nextPosition[1] < 0 
-    || nextPosition[0] >= field[0].length 
-    || nextPosition[1] >= field[1].length) {
+  if (
+    nextPosition[0] < 0 ||
+    nextPosition[1] < 0 ||
+    nextPosition[0] >= field[0].length ||
+    nextPosition[1] >= field[1].length
+  ) {
     // the next cell is out of bounds
     hasError = true;
   }
@@ -158,8 +166,8 @@ function p2(input) {
     const rightNodes = [getRightNode(node, direction)];
 
     if (prevDirection && prevDirection != direction) {
-      leftNodes.push(getLeftNode(node, prevDirection))
-      rightNodes.push(getRightNode(node, prevDirection))
+      leftNodes.push(getLeftNode(node, prevDirection));
+      rightNodes.push(getRightNode(node, prevDirection));
     }
 
     for (const leftNode of leftNodes) {
@@ -167,7 +175,11 @@ function p2(input) {
       if (!loopNodes.has(leftNodeId)) {
         leftNodesById.set(leftNodeId, leftNode);
 
-        if (!leftTouchesBounds && !rightTouchesBounds && touchesOrOutOfBounds(leftNode, bounds)) {
+        if (
+          !leftTouchesBounds &&
+          !rightTouchesBounds &&
+          touchesOrOutOfBounds(leftNode, bounds)
+        ) {
           leftTouchesBounds = true;
         }
       }
@@ -178,7 +190,11 @@ function p2(input) {
       if (!loopNodes.has(rightNodeId)) {
         rightNodesById.set(rightNodeId, rightNode);
 
-        if (!leftTouchesBounds && !rightTouchesBounds && touchesOrOutOfBounds(rightNode, bounds)) {
+        if (
+          !leftTouchesBounds &&
+          !rightTouchesBounds &&
+          touchesOrOutOfBounds(rightNode, bounds)
+        ) {
           rightTouchesBounds = true;
         }
       }
@@ -251,10 +267,10 @@ function getNeighbours(node, loopNodes) {
     [node[0] - 1, node[1]],
     [node[0] + 1, node[1]],
     [node[0], node[1] - 1],
-    [node[0], node[1] + 1]
+    [node[0], node[1] + 1],
   ];
 
-  return neighbours.filter(n => !loopNodes.has(`${n[0]}_${n[1]}`));
+  return neighbours.filter((n) => !loopNodes.has(`${n[0]}_${n[1]}`));
 }
 
 function getLeftNode(node, direction) {
@@ -264,13 +280,13 @@ function getLeftNode(node, direction) {
   // if right -> up
   switch (direction) {
     case Direction.Up:
-      return [node[0]-1, node[1]];
+      return [node[0] - 1, node[1]];
     case Direction.Down:
-      return [node[0]+1, node[1]];
+      return [node[0] + 1, node[1]];
     case Direction.Left:
-      return [node[0], node[1]+1];
+      return [node[0], node[1] + 1];
     case Direction.Right:
-      return [node[0], node[1]-1];
+      return [node[0], node[1] - 1];
   }
 }
 
@@ -281,27 +297,29 @@ function getRightNode(node, direction) {
   // if right -> down
   switch (direction) {
     case Direction.Up:
-      return [node[0]+1, node[1]];
+      return [node[0] + 1, node[1]];
     case Direction.Down:
-      return [node[0]-1, node[1]];
+      return [node[0] - 1, node[1]];
     case Direction.Left:
-      return [node[0], node[1]-1];
+      return [node[0], node[1] - 1];
     case Direction.Right:
-      return [node[0], node[1]+1];
+      return [node[0], node[1] + 1];
   }
 }
 
 function touchesOrOutOfBounds(node, bounds) {
-  return node[0] <= bounds.minX
-    || node[0] >= bounds.maxX
-    || node[1] <= bounds.minY
-    || node[1] >= bounds.maxY;
+  return (
+    node[0] <= bounds.minX ||
+    node[0] >= bounds.maxX ||
+    node[1] <= bounds.minY ||
+    node[1] >= bounds.maxY
+  );
 }
 
 function getBoundingBox(loop) {
-  let minX = Number.MAX_SAFE_INTEGER, 
-    minY = Number.MAX_SAFE_INTEGER, 
-    maxX = -1, 
+  let minX = Number.MAX_SAFE_INTEGER,
+    minY = Number.MAX_SAFE_INTEGER,
+    maxX = -1,
     maxY = -1;
 
   for (let [x, y] of loop) {

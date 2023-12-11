@@ -37,7 +37,7 @@ humidity-to-location map:
 
 test.each([
   ["test", testCase, 35, []],
-  ['input', input, 910845529, [1044732983]]
+  ["input", input, 910845529, [1044732983]],
 ])("p1 works for %s", (name, input, expectation, bads) => {
   const actual = p1(input);
 
@@ -80,7 +80,7 @@ test.each([
   // ["test", testCase, 46, []],
   // ["test2", test2Case, 46, []],
   // ["my", myCase, 12, []],
-  ['input', input, 77435348, [292211340]]
+  ["input", input, 77435348, [292211340]],
 ])("p2 works for %s", (name, input, expectation, bads) => {
   const actual = p2(input);
 

@@ -10,7 +10,7 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`;
 
 test.each([
   ["test", testCase, 13, []],
-  ['input', input, 21158, [103065]]
+  ["input", input, 21158, [103065]],
 ])("p1 works for %s", (name, input, expectation, bads) => {
   const actual = p1(input);
 
@@ -25,7 +25,7 @@ test.each([
 
 test.each([
   ["test", testCase, 30, [], [1, 2, 4, 8, 14, 1]],
-  ['input', input, 6050769, [], []]
+  ["input", input, 6050769, [], []],
 ])("p2 works for %s", (name, input, expectation, bads, expCards) => {
   const { total, cards } = p2(input);
 

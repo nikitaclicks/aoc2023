@@ -23,12 +23,12 @@ const myCase = `......*...
 ......755.
 ..........
 .664.598..
-....$.....`; //vtbmbpgffive2hdmzjzqqqc4one
+....$.....`;
 
 test.each([
   ["test", testCase, 4361, []],
   ["my", myCase, 4361 + 58 + 114 - 755, []],
-  ['input', input, 559667, [612925, 553071]]
+  ["input", input, 559667, [612925, 553071]],
 ])("p1 works for %s", (name, input, expectation, bads) => {
   const actual = p1(input);
 
@@ -54,8 +54,8 @@ const testCase2 = `467..114..
 
 test.each([
   ["test", testCase2, 467835, []],
-  // ["my", myCase, 4361 + 58 + 114 - 755, []],
-  ['input', input, 86841457, []]
+  ["my", myCase, 16345, []],
+  ["input", input, 86841457, []],
 ])("p2 works for %s", (name, input, expectation, bads) => {
   const actual = p2(input);
 

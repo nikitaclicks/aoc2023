@@ -35,7 +35,7 @@ function findFirstNum(s, names) {
       } else {
         cursor[n] = 0;
         if (s[i] === names[n][0]) {
-            cursor[n] += 1;
+          cursor[n] += 1;
         }
       }
     }
@@ -56,7 +56,7 @@ function findLastNum(s, names) {
       } else {
         cursor[n] = names[n].length - 1;
         if (s[i] === names[n][names[n].length - 1]) {
-            cursor[n] -= 1;
+          cursor[n] -= 1;
         }
       }
     }

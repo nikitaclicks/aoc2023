@@ -6,7 +6,7 @@ Distance:  9  40  200`;
 
 test.each([
   ["test", testCase, 288, []],
-  ['input', input, 345015, []]
+  ["input", input, 345015, []],
 ])("p1 works for %s", (name, input, expectation, bads) => {
   const actual = p1(input);
 
@@ -21,7 +21,7 @@ test.each([
 
 test.each([
   ["test", testCase, 71503, []],
-  ['input', input, 42588603, []]
+  ["input", input, 42588603, []],
 ])("p2 works for %s", (name, input, expectation, bads) => {
   const actual = p2(input);
 

@@ -20,7 +20,7 @@ ZZZ = (ZZZ, ZZZ)`;
 test.each([
   ["test", testCase, 2, []],
   ["test2", testCase2, 6, []],
-  ['input', input, 17141, []]
+  ["input", input, 17141, []],
 ])("p1 works for %s", (name, input, expectation, bads) => {
   const actual = p1(input);
 
@@ -46,7 +46,7 @@ XXX = (XXX, XXX)`;
 
 test.each([
   ["test", testCaseP2, 6, []],
-  ['input', input, 10818234074807, []]
+  ["input", input, 10818234074807, []],
 ])("p2 works for %s", (name, input, expectation, bads) => {
   const actual = p2(input);
 

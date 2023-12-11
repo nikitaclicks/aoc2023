@@ -1,9 +1,22 @@
-const sequence = ['seed', 'soil', 'fertilizer', 'water', 'light', 'temperature', 'humidity', 'location'];
+const sequence = [
+  "seed",
+  "soil",
+  "fertilizer",
+  "water",
+  "light",
+  "temperature",
+  "humidity",
+  "location",
+];
 
 function p1(input) {
   const rows = input.split("\n");
 
-  const seeds = rows[0].split(':')[1].trim().split(' ').map(x => Number(x.trim()));
+  const seeds = rows[0]
+    .split(":")[1]
+    .trim()
+    .split(" ")
+    .map((x) => Number(x.trim()));
 
   const maps = new Map();
 
@@ -15,12 +28,12 @@ function p1(input) {
       continue;
     }
 
-    if (row.endsWith('map:')) {
-      term = row.split(' ')[0];
+    if (row.endsWith("map:")) {
+      term = row.split(" ")[0];
 
       maps.set(term, []);
     } else {
-      const [d, s, l] = row.split(' ').map(x => Number(x.trim()));
+      const [d, s, l] = row.split(" ").map((x) => Number(x.trim()));
 
       maps.get(term).push({ d, s, l });
     }
@@ -39,12 +52,14 @@ function p1(input) {
 
     // convert
     for (const srcNum of sourceNums) {
-      const map = mapping.find(({ d, s, l }) => s <= srcNum && (s + l + 1) >= srcNum);
+      const map = mapping.find(
+        ({ d, s, l }) => s <= srcNum && s + l + 1 >= srcNum
+      );
 
       if (!map) {
         destNums.push(srcNum);
       } else {
-        const destNum = srcNum - map.s + map.d
+        const destNum = srcNum - map.s + map.d;
         destNums.push(destNum);
       }
     }
@@ -60,9 +75,13 @@ module.exports.p1 = p1;
 function p2(input) {
   const rows = input.split("\n");
 
-  const seedsRow = rows[0].split(':')[1].trim().split(' ').map(x => Number(x.trim()));
+  const seedsRow = rows[0]
+    .split(":")[1]
+    .trim()
+    .split(" ")
+    .map((x) => Number(x.trim()));
 
-  const seedRanges = []; 
+  const seedRanges = [];
   for (let i = 0; i < seedsRow.length - 1; i += 2) {
     seedRanges.push({ start: seedsRow[i], length: seedsRow[i + 1] });
   }
@@ -77,18 +96,18 @@ function p2(input) {
       continue;
     }
 
-    if (row.endsWith('map:')) {
-      term = row.split(' ')[0];
+    if (row.endsWith("map:")) {
+      term = row.split(" ")[0];
 
       maps.set(term, []);
     } else {
-      const [d, s, l] = row.split(' ').map(x => Number(x.trim()));
+      const [d, s, l] = row.split(" ").map((x) => Number(x.trim()));
 
       maps.get(term).push({ d, s, l });
     }
   }
 
-  const ranges = new Map([['seed', seedRanges]]);
+  const ranges = new Map([["seed", seedRanges]]);
 
   for (let i = 0; i < sequence.length - 1; i++) {
     let source = sequence[i];
@@ -99,7 +118,10 @@ function p2(input) {
     const destRanges = [];
 
     for (const sourceRange of sourceRanges) {
-      const mapping = maps.get(`${source}-to-${dest}`).concat().sort((a, b) => b.s - a.s);
+      const mapping = maps
+        .get(`${source}-to-${dest}`)
+        .concat()
+        .sort((a, b) => b.s - a.s);
 
       let nextMapping = mapping.pop();
 
@@ -114,13 +136,16 @@ function p2(input) {
         let destRange;
         if (!nextMapping) {
           // we apply the range, not map exists for the range
-          destRange = { start: rangeStart, length: sourceRange.length - processed };
+          destRange = {
+            start: rangeStart,
+            length: sourceRange.length - processed,
+          };
           processed = sourceRange.length;
         } else {
           const pending = sourceRange.length - processed;
           if (rangeHasItemsBeforeMap(rangeStart, nextMapping)) {
             // the range has items before the map, we apply them
-            
+
             const mapStart = nextMapping.s;
             const itemsBeforeStart = mapStart - rangeStart;
             const available = Math.min(pending, itemsBeforeStart);
@@ -142,7 +167,10 @@ function p2(input) {
     ranges.set(dest, destRanges);
   }
 
-  return ranges.get(sequence[sequence.length - 1]).map(x => x.start).sort((a, b) => a - b)[0];
+  return ranges
+    .get(sequence[sequence.length - 1])
+    .map((x) => x.start)
+    .sort((a, b) => a - b)[0];
 }
 
 function isMapBeforeRange(rangeStart, map) {

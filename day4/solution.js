@@ -4,8 +4,16 @@ function p1(input) {
   let win = 0;
 
   for (const row of rows) {
-    const [ winning, have ] = row.split(':')[1].split('|')
-      .map(x => x.trim().split(' ').filter(x => x.length).map(x => Number(x)));
+    const [winning, have] = row
+      .split(":")[1]
+      .split("|")
+      .map((x) =>
+        x
+          .trim()
+          .split(" ")
+          .filter((x) => x.length)
+          .map((x) => Number(x))
+      );
 
     const distinctWinning = new Set(winning);
 
@@ -35,8 +43,16 @@ function p2(input) {
   const wins = [];
 
   for (const row of rows) {
-    const [ winning, have ] = row.split(':')[1].split('|')
-      .map(x => x.trim().split(' ').filter(x => x.length).map(x => Number(x)));
+    const [winning, have] = row
+      .split(":")[1]
+      .split("|")
+      .map((x) =>
+        x
+          .trim()
+          .split(" ")
+          .filter((x) => x.length)
+          .map((x) => Number(x))
+      );
 
     const distinctWinning = new Set(winning);
 

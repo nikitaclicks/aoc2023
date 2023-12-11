@@ -1,6 +1,19 @@
 function p1(input) {
-  const strengthOrder = ['A', 'K', 'Q', 'J', 'T', '9', '8',
-               '7', '6', '5', '4', '3', '2'];
+  const strengthOrder = [
+    "A",
+    "K",
+    "Q",
+    "J",
+    "T",
+    "9",
+    "8",
+    "7",
+    "6",
+    "5",
+    "4",
+    "3",
+    "2",
+  ];
 
   const typeRules = [
     function fiveOfKind(cards) {
@@ -72,8 +85,9 @@ function p1(input) {
 
   const rows = input.split("\n");
 
-  const hands = rows.map(r => r.split(' '))
-    .map(h => ({ cards: h[0], bet: Number(h[1]) }));
+  const hands = rows
+    .map((r) => r.split(" "))
+    .map((h) => ({ cards: h[0], bet: Number(h[1]) }));
 
   const handsByType = new Map();
 
@@ -121,13 +135,13 @@ function p1(input) {
     const handStrengths = [];
 
     for (const hand of hands) {
-      const strength = strengthOrder.indexOf(hand.cards[card])
-      
+      const strength = strengthOrder.indexOf(hand.cards[card]);
+
       handStrengths.push(strength);
     }
 
     for (let strength = 0; strength < strengthOrder.length; ++strength) {
-      const handsWithCard = []
+      const handsWithCard = [];
       for (let i = 0; i < hands.length; ++i) {
         if (handStrengths[i] === strength) {
           handsWithCard.push(hands[i]);
@@ -137,7 +151,7 @@ function p1(input) {
       if (handsWithCard.length === 1) {
         orderedHands.push(handsWithCard[0]);
       } else if (handsWithCard.length > 1) {
-        orderedHands.push(...orderByStrongCard(handsWithCard, card + 1))
+        orderedHands.push(...orderByStrongCard(handsWithCard, card + 1));
       }
     }
 
@@ -148,8 +162,21 @@ function p1(input) {
 module.exports.p1 = p1;
 
 function p2(input) {
-  const strengthOrder = ['A', 'K', 'Q', 'T', '9', '8',
-               '7', '6', '5', '4', '3', '2', 'J'];
+  const strengthOrder = [
+    "A",
+    "K",
+    "Q",
+    "T",
+    "9",
+    "8",
+    "7",
+    "6",
+    "5",
+    "4",
+    "3",
+    "2",
+    "J",
+  ];
 
   const typeRules = [
     function fiveOfKind(cards) {
@@ -157,7 +184,7 @@ function p2(input) {
       let max = 0;
       let jokers = 0;
       for (const card of cards) {
-        if (card === 'J') jokers++;
+        if (card === "J") jokers++;
         else {
           const count = (cardsOfKind.get(card) ?? 0) + 1;
           cardsOfKind.set(card, count);
@@ -171,7 +198,7 @@ function p2(input) {
       let max = 0;
       let jokers = 0;
       for (const card of cards) {
-        if (card === 'J') jokers++;
+        if (card === "J") jokers++;
         else {
           const count = (cardsOfKind.get(card) ?? 0) + 1;
           cardsOfKind.set(card, count);
@@ -186,7 +213,7 @@ function p2(input) {
       let threes = new Set();
       let jokers = 0;
       for (const card of cards) {
-        if (card === 'J') jokers++;
+        if (card === "J") jokers++;
         else {
           const count = (cardsOfKind.get(card) ?? 0) + 1;
           cardsOfKind.set(card, count);
@@ -194,9 +221,11 @@ function p2(input) {
           if (count === 2) twos.add(card);
         }
       }
-      return (twos.size === 2 && threes.size === 1) ||
+      return (
+        (twos.size === 2 && threes.size === 1) ||
         (twos.size === 2 && jokers === 1) ||
-        (twos.size === 1 && jokers === 2);
+        (twos.size === 1 && jokers === 2)
+      );
     },
     function threeOfKind(cards) {
       const cardsOfKind = new Map();
@@ -206,7 +235,7 @@ function p2(input) {
         const count = (cardsOfKind.get(card) ?? 0) + 1;
         cardsOfKind.set(card, count);
         if (count > max) max = count;
-        if (card === 'J') jokers++;
+        if (card === "J") jokers++;
       }
       return max + jokers >= 3;
     },
@@ -218,10 +247,9 @@ function p2(input) {
         const count = (cardsOfKind.get(card) ?? 0) + 1;
         cardsOfKind.set(card, count);
         if (count === 2) pairs.add(card);
-        if (card === 'J') jokers++;
+        if (card === "J") jokers++;
       }
-      return pairs.size === 2 || 
-        (pairs.size === 1 && jokers >= 2);
+      return pairs.size === 2 || (pairs.size === 1 && jokers >= 2);
     },
     function onePair(cards) {
       const cardsOfKind = new Map();
@@ -231,7 +259,7 @@ function p2(input) {
         const count = (cardsOfKind.get(card) ?? 0) + 1;
         cardsOfKind.set(card, count);
         if (count === 2) pairs.add(card);
-        if (card === 'J') jokers++;
+        if (card === "J") jokers++;
       }
       return pairs.size === 1 || jokers === 1;
     },
@@ -242,8 +270,9 @@ function p2(input) {
 
   const rows = input.split("\n");
 
-  const hands = rows.map(r => r.split(' '))
-    .map(h => ({ cards: h[0], bet: Number(h[1]) }));
+  const hands = rows
+    .map((r) => r.split(" "))
+    .map((h) => ({ cards: h[0], bet: Number(h[1]) }));
 
   const handsByType = new Map();
 
@@ -291,13 +320,13 @@ function p2(input) {
     const handStrengths = [];
 
     for (const hand of hands) {
-      const strength = strengthOrder.indexOf(hand.cards[card])
-      
+      const strength = strengthOrder.indexOf(hand.cards[card]);
+
       handStrengths.push(strength);
     }
 
     for (let strength = 0; strength < strengthOrder.length; ++strength) {
-      const handsWithCard = []
+      const handsWithCard = [];
       for (let i = 0; i < hands.length; ++i) {
         if (handStrengths[i] === strength) {
           handsWithCard.push(hands[i]);
@@ -307,7 +336,7 @@ function p2(input) {
       if (handsWithCard.length === 1) {
         orderedHands.push(handsWithCard[0]);
       } else if (handsWithCard.length > 1) {
-        orderedHands.push(...orderByStrongCard(handsWithCard, card + 1))
+        orderedHands.push(...orderByStrongCard(handsWithCard, card + 1));
       }
     }
 

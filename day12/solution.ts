@@ -65,10 +65,12 @@ function countWays({
 
   if (!nums.length) {
     for (const char of string) {
+      // no numbers left but we still need some
       if (char === '#') {
         return 0;
       }
     }
+    // no numbers left and we don't need any
     return 1;
   }
 
@@ -76,6 +78,7 @@ function countWays({
   const symbolsNeeded = pendingSum + nums.length - 1;
   const isValidString = string.length >= symbolsNeeded;
 
+  // not enough length to even fit the numbers
   if (!isValidString) {
     return 0;
   }
@@ -92,11 +95,13 @@ function countWays({
     
     const [first, ...rest] = nums;
     for (let i = 1; i < first; i++) {
+      // we must fit a number
       if (string[i] === '.') {
         return 0;
       }
     }
 
+    // the number must be followed by a dot or the end of the string
     if (string[first] === '#') {
       return 0;
     }
@@ -110,6 +115,8 @@ function countWays({
   } else if (char === ".") {
     canSkipChar = true;
   } else {
+    // char is ?, we can try two scenarios, with # and with .
+    // the dot can be omitted, see block above
     possibilities += countWays({
       string: '#' + string.slice(1),
       nums,

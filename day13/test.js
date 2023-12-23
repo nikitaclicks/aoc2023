@@ -77,8 +77,8 @@ test.each([
 });
 
 test.each([
-  ["test", testCase, -1, []],
-  ['input', input, -1, []]
+  ["test", testCase, 400, []],
+  ['input', input, 37478, [43892]]
 ])("p2 works for %s", (name, input, expectation, bads) => {
   const actual = p2(input);
 

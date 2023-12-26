@@ -25,7 +25,11 @@ export function p2(input: string) {
   return getMinDistance(input, 4, 10);
 }
 
-function getMinDistance(input: string, minStepDistance: number, maxStepDistance: number) {
+function getMinDistance(
+  input: string,
+  minStepDistance: number,
+  maxStepDistance: number
+) {
   const rows = input.split("\n");
 
   const blocks = rows.map((row) => row.split("").map((char) => Number(char)));
@@ -50,13 +54,20 @@ function getMinDistance(input: string, minStepDistance: number, maxStepDistance:
     distance: 0,
     direction: Direction.Any,
   };
-  
+
   const end: Block = {
     x: blocks[0].length - 1,
     y: blocks.length - 1,
   };
 
-  traverseBlocks(blocks, [start], end, distances, minStepDistance, maxStepDistance);
+  traverseBlocks(
+    blocks,
+    [start],
+    end,
+    distances,
+    minStepDistance,
+    maxStepDistance
+  );
 
   const min = Math.min(...(Object.values(distances[end.y][end.x]) as number[]));
 
@@ -71,7 +82,9 @@ function traverseBlocks(
   minStepDistance: number,
   maxStepDistance: number
 ) {
-  const nextSteps = startSteps.flatMap(start => getNextSteps(blocks, start, minStepDistance, maxStepDistance, distances));
+  const nextSteps = startSteps.flatMap((start) =>
+    getNextSteps(blocks, start, minStepDistance, maxStepDistance, distances)
+  );
 
   const unfinishedSteps: Step[] = [];
   for (const next of nextSteps) {
@@ -90,13 +103,23 @@ function traverseBlocks(
   const nextStartSteps: Step[] = [];
 
   for (const unfinishedStep of unfinishedSteps) {
-    if (unfinishedStep.distance === distances[unfinishedStep.y][unfinishedStep.x][unfinishedStep.direction]) {
+    if (
+      unfinishedStep.distance ===
+      distances[unfinishedStep.y][unfinishedStep.x][unfinishedStep.direction]
+    ) {
       nextStartSteps.push(unfinishedStep);
     }
   }
 
   if (nextStartSteps.length) {
-    traverseBlocks(blocks, nextStartSteps, endBlock, distances, minStepDistance, maxStepDistance);
+    traverseBlocks(
+      blocks,
+      nextStartSteps,
+      endBlock,
+      distances,
+      minStepDistance,
+      maxStepDistance
+    );
   }
 }
 
@@ -121,15 +144,17 @@ function getNextSteps(
       step,
       direction,
       minStepDistance,
-      maxStepDistance,
+      maxStepDistance
     );
 
     for (const nextStep of nextSteps) {
-      const fartherThenExisting = distances[nextStep.y][nextStep.x][nextStep.direction] <= nextStep.distance;
+      const fartherThenExisting =
+        distances[nextStep.y][nextStep.x][nextStep.direction] <=
+        nextStep.distance;
       if (fartherThenExisting) {
         continue;
       }
-  
+
       nextStep.distance += step.distance;
 
       next.push(nextStep);
@@ -144,7 +169,7 @@ function getNextStepsAtDirection(
   currentBlock: Block,
   direction: Direction,
   minStepDistance: number,
-  maxStepDistance: number,
+  maxStepDistance: number
 ): Step[] {
   const { x, y } = currentBlock;
 

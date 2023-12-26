@@ -1,15 +1,11 @@
-function p1(input) {
+export function p1(input: string): number {
   const rows = input.split("\n");
 
   return -1;
 }
 
-module.exports.p1 = p1;
-
-function p2(input) {
+export function p2(input: string): number {
   const rows = input.split("\n");
 
   return -1;
 }
-
-module.exports.p2 = p2;

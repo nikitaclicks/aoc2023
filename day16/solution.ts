@@ -69,16 +69,11 @@ function hit(cells: Cell[][], beams: Beam[]) {
 }
 
 function getNextBeams(cells: Cell[][], beam: Beam) {
-  const nextBeams: Beam[] = [];
-
-  // const nextCell = projectBeam(cells, beam, beam.direction);
-  // if (!nextCell) {
-  //   return nextBeams;
-  // }
-
   const cell = cells[beam.y][beam.x];
 
   const directions = getNewDirections(beam.direction, cell);
+
+  const nextBeams: Beam[] = [];
 
   for (const direction of directions) {
     const nextBeam = projectBeam(cells, beam, direction);
